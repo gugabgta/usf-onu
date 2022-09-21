@@ -11,54 +11,45 @@ class Database
 
     private function __construct()
     {
-        try
-        {
-        $this->_pdo = new PDO('mysql:host='.Config::get('mysql/host').';'.
-                                'dbname='.Config::get('mysql/db_name'),
-                                Config::get('mysql/username'),
-                                Config::get('mysql/password')
+        try {
+            $this->_pdo = new PDO(
+                'mysql:host=' . Config::get('mysql/host') . ';' .
+                                'dbname=' . Config::get('mysql/db_name'),
+                Config::get('mysql/username'),
+                Config::get('mysql/password')
             );
-        }
-        catch(PDOException $e)
-        {
+        } catch (PDOException $e) {
             die($e->getMessage());
         }
     }
 
     public static function getInstance()
     {
-        if (!isset(self::$_instance))
-        {
+        if (!isset(self::$_instance)) {
             self::$_instance = new Database();
         }
 
         return self::$_instance;
     }
 
-    public function query($sql, $params = array())
+    public function query($sql, $params = [])
     {
         $this->_error = false;
 
-        if ($this->_query = $this->_pdo->prepare($sql))
-        {
+        if ($this->_query = $this->_pdo->prepare($sql)) {
             $x = 1;
 
-            if (count($params))
-            {
-                foreach ($params as $param)
-                {
+            if (count($params)) {
+                foreach ($params as $param) {
                     $this->_query->bindvalue($x, $param);
                     $x++;
                 }
             }
 
-            if ($this->_query->execute())
-            {
+            if ($this->_query->execute()) {
                 $this->_results     = $this->_query->fetchAll(PDO::FETCH_OBJ);
                 $this->_count       = $this->_query->rowCount();
-            }
-            else
-            {
+            } else {
                 $this->_error = true;
             }
         }
@@ -66,22 +57,19 @@ class Database
         return $this;
     }
 
-    public function action($action, $table, $where = array())
+    public function action($action, $table, $where = [])
     {
-        if (count($where) === 3)
-        {
-            $operators  = array('=', '>', '<', '>=', '<=');
+        if (count($where) === 3) {
+            $operators  = ['=', '>', '<', '>=', '<='];
 
             $field      = $where[0];
             $operator   = $where[1];
             $value      = $where[2];
 
-            if (in_array($operator, $operators))
-            {
+            if (in_array($operator, $operators)) {
                 $sql = "{$action} FROM {$table} WHERE {$field} {$operator} ?";
 
-                if (!$this->query($sql, array($value))->error())
-                {
+                if (!$this->query($sql, [$value])->error()) {
                     return $this;
                 }
             }
@@ -100,30 +88,26 @@ class Database
         return $this->action('DELETE', $table, $where);
     }
 
-    public function insert($table, $fields = array())
+    public function insert($table, $fields = [])
     {
-        if (count($fields))
-        {
+        if (count($fields)) {
             $keys   = array_keys($fields);
             $values = '';
             $x      = 1;
 
-            foreach ($fields as $field)
-            {
+            foreach ($fields as $field) {
                 $values .= '?';
 
-                if ($x < count($fields))
-                {
+                if ($x < count($fields)) {
                     $values .= ', ';
                 }
 
                 $x++;
             }
 
-            $sql = "INSERT INTO {$table} (`".implode('`, `', $keys)."`) VALUES ({$values})";
+            $sql = "INSERT INTO {$table} (`" . implode('`, `', $keys) . "`) VALUES ({$values})";
 
-            if (!$this->query($sql, $fields)->error())
-            {
+            if (!$this->query($sql, $fields)->error()) {
                 return true;
             }
         }
@@ -136,12 +120,10 @@ class Database
         $set    = '';
         $x      = 1;
 
-        foreach ($fields as $name => $value)
-        {
+        foreach ($fields as $name => $value) {
             $set .= "{$name} = ?";
 
-            if ($x < count($fields))
-            {
+            if ($x < count($fields)) {
                 $set .= ', ';
             }
 
@@ -150,8 +132,7 @@ class Database
 
         $sql = "UPDATE {$table} SET {$set} WHERE uid = {$id}";
 
-        if (!$this->query($sql, $fields)->error())
-        {
+        if (!$this->query($sql, $fields)->error()) {
             return true;
         }
 

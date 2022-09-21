@@ -1,10 +1,9 @@
 <?php
+
 require_once 'app/backend/core/Init.php';
 
-if (Input::exists())
-{
-    if (Token::check(Input::get('csrf_token')))
-    {
+if (Input::exists()) {
+    if (Token::check(Input::get('csrf_token'))) {
         $validate = new Validation();
 
         $validation = $validate->check($_POST, array(
@@ -37,32 +36,24 @@ if (Input::exists())
                 ),
             ));
 
-        if ($validation->passed())
-        {
-             try
-                {
+        if ($validation->passed()) {
+            try {
+                   $user->update(array(
+                       'name'  => Input::get('name'),
+                       'username'  => Input::get('username'),
+                   ));
+
+                if ($validation->optional()) {
                     $user->update(array(
-                        'name'  => Input::get('name'),
-                        'username'  => Input::get('username'),
+                    'password'  => Password::hash(Input::get('new_password'))
                     ));
-
-                     if ($validation->optional())
-                    {
-                        $user->update(array(
-                        'password'  => Password::hash(Input::get('new_password'))
-                        ));
-                    }
-                    Session::flash('update-success', 'Profile successfully updated!');
-                    Redirect::to('index.php');
                 }
-             catch(Exception $e)
-                {
-                    die($e->getMessage());
-                }
+                   Session::flash('update-success', 'Profile successfully updated!');
+                   Redirect::to('index.php');
+            } catch (Exception $e) {
+                   die($e->getMessage());
             }
-
-        else
-        {
+        } else {
             echo '<div class="alert alert-danger"><strong></strong>' . cleaner($validation->error()) . '</div>';
         }
     }

@@ -1,10 +1,9 @@
 <?php
+
 require_once 'app/backend/core/Init.php';
 
-if(Input::exists())
-{
-    if(Token::check(Input::get('csrf_token')) )
-    {
+if (Input::exists()) {
+    if (Token::check(Input::get('csrf_token'))) {
         $validate = new Validation();
 
         $validation = $validate->check($_POST, array(
@@ -32,10 +31,8 @@ if(Input::exists())
             )
         ));
 
-        if ($validate->passed())
-        {
-            try
-            {
+        if ($validate->passed()) {
+            try {
                 $user->create(array(
                     'username'  => Input::get('username'),
                     'password'  => Password::hash(Input::get('password')),
@@ -46,16 +43,11 @@ if(Input::exists())
 
                 Session::flash('register-success', 'Thanks for registering! You can login now.');
                 Redirect::to('index.php');
-            }
-            catch(Exception $e)
-            {
+            } catch (Exception $e) {
                 die($e->getMessage());
             }
-        }
-        else
-        {
-            foreach ($validate->errors() as $error)
-            {
+        } else {
+            foreach ($validate->errors() as $error) {
                 echo '<div class="alert alert-danger"><strong></strong>' . cleaner($error) . '</div>';
             }
         }

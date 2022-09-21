@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 require_once 'app/backend/auth/config.php';

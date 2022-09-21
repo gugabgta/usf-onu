@@ -4,11 +4,14 @@ class Password
 {
     public static function hash($password)
     {
-       return password_hash($password, Config::get('password/algo_name'),
+        return password_hash(
+            $password,
+            Config::get('password/algo_name'),
             array(
                 'cost' => Config::get('password/cost'),
                 'salt' => Hash::salt()
-            ));
+            )
+        );
     }
 
     public static function rehash($hash)
@@ -25,5 +28,4 @@ class Password
     {
         return password_get_info($hash);
     }
-
 }

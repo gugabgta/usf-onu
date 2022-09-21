@@ -20,22 +20,18 @@ class Session
 
     public function delete($name)
     {
-        if(self::exists($name))
-        {
+        if (self::exists($name)) {
             unset($_SESSION[$name]);
         }
     }
 
     public static function flash($name, $string = '')
     {
-        if(self::exists($name))
-        {
+        if (self::exists($name)) {
             $session = self::get($name);
             self::delete($name);
             return $session;
-        }
-        else
-        {
+        } else {
             self::put($name, $string);
         }
     }

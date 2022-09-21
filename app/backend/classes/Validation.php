@@ -2,82 +2,62 @@
 
 class Validation
 {
-    private $_passed = false,
-            $_optional = false,
-            $_errors = array(),
-            $_db     = null;
+    private $_passed = false;
+    private $_optional = false;
+    private $_errors = [];
+    private $_db     = null;
 
     public function __construct()
     {
         $this->_db = Database::getInstance();
-        $this->_user = new User;
+        $this->_user = new User();
     }
 
-    public function check($source, $items = array())
+    public function check($source, $items = [])
     {
-        foreach ($items as $item => $rules)
-        {
-            foreach ($rules as $rule => $rule_value)
-            {
-
+        foreach ($items as $item => $rules) {
+            foreach ($rules as $rule => $rule_value) {
                 $value = trim($source[$item]);
                 $item = escape($item);
 
-                if ($rule === 'optional' && ! empty($value))
-                {
-                   $this->_optional = true;
+                if ($rule === 'optional' && ! empty($value)) {
+                    $this->_optional = true;
                 }
 
-                if ($rule === 'required' && empty($value))
-                {
+                if ($rule === 'required' && empty($value)) {
                     $this->addError("{$item} is required.");
                 }
 
-                if ($rule === 'bind' && empty($value) && ! empty($source[$rule_value]))
-                {
+                if ($rule === 'bind' && empty($value) && ! empty($source[$rule_value])) {
                     $this->addError("{$item} is required.");
-                }
-
-                else if (!empty($value))
-                {
-                    switch ($rule)
-                    {
+                } elseif (!empty($value)) {
+                    switch ($rule) {
                         case 'min':
-
-                            if (strlen($value) < $rule_value)
-                            {
+                            if (strlen($value) < $rule_value) {
                                 $this->addError("{$item} must be minimum of {$rule_value} character.");
                             }
                             break;
 
                         case 'max':
-
-                            if (strlen($value) > $rule_value)
-                            {
+                            if (strlen($value) > $rule_value) {
                                 $this->addError("{$item} must be maximum of {$rule_value} character.");
                             }
                             break;
 
                         case 'match':
-
-                            if ($value != $source[$rule_value])
-                            {
+                            if ($value != $source[$rule_value]) {
                                 $this->addError("{$rule_value} must match {$item}.");
                             }
                             break;
 
                         case 'email':
-
-                            if (filter_var($value,FILTER_VALIDATE_EMAIL) !==  $rule_value)
-                            {
+                            if (filter_var($value, FILTER_VALIDATE_EMAIL) !==  $rule_value) {
                                 $this->addError("{$item} must valid email format.");
                             }
                             break;
 
                         case 'alnum':
-
-                            if (ctype_alnum($value) !==  $rule_value)
-                            {
+                            if (ctype_alnum($value) !==  $rule_value) {
                                 $this->addError("{$item} must alphanumeric.");
                             }
                             break;
@@ -85,8 +65,7 @@ class Validation
                         case 'unique':
                             $check = $this->_db->get($rule_value, array($item, '=', $value));
 
-                            if ($check->count())
-                            {
+                            if ($check->count()) {
                                 $this->addError("{$item} already exists.");
                             }
                             break;
@@ -94,8 +73,7 @@ class Validation
                         case 'verify':
                             $check = $this->_db->get($rule_value, array($item, '=', $value));
 
-                            if (! Password::check($value, $this->_user->data()->password))
-                            {
+                            if (! Password::check($value, $this->_user->data()->password)) {
                                 $this->addError("Wrong Current Password!.");
                             }
                             break;
@@ -104,8 +82,7 @@ class Validation
             }
         }
 
-        if (empty($this->_errors))
-        {
+        if (empty($this->_errors)) {
             $this->_passed = true;
         }
 

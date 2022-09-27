@@ -2,19 +2,19 @@
 
 class Database
 {
-    private static $_instance = null;
-    private $_pdo,
-            $_query,
-            $_error = false,
-            $_results,
-            $_count = 0;
+    private static Database $instance;
+    private $pdo;
+    private $query;
+    private $error = false;
+    private $results;
+    private $count = 0;
 
     private function __construct()
     {
         try {
-            $this->_pdo = new PDO(
+            $this->pdo = new PDO(
                 'mysql:host=' . Config::get('mysql/host') . ';' .
-                                'dbname=' . Config::get('mysql/db_name'),
+                'dbname=' . Config::get('mysql/db_name'),
                 Config::get('mysql/username'),
                 Config::get('mysql/password')
             );
@@ -23,93 +23,105 @@ class Database
         }
     }
 
-    public static function getInstance()
+    public static function getInstance(): self
     {
-        if (!isset(self::$_instance)) {
-            self::$_instance = new Database();
+        if (!isset(self::$instance)) {
+            self::$instance = new self();
         }
 
-        return self::$_instance;
+        return self::$instance;
     }
 
     public function query($sql, $params = [])
     {
-        $this->_error = false;
+        $this->error = false;
 
-        if ($this->_query = $this->_pdo->prepare($sql)) {
+        if ($this->query = $this->pdo->prepare($sql)) {
             $x = 1;
 
             if (count($params)) {
                 foreach ($params as $param) {
-                    $this->_query->bindvalue($x, $param);
+                    $this->query->bindvalue($x, $param);
                     $x++;
                 }
             }
 
-            if ($this->_query->execute()) {
-                $this->_results     = $this->_query->fetchAll(PDO::FETCH_OBJ);
-                $this->_count       = $this->_query->rowCount();
+            if ($this->query->execute()) {
+                $this->results     = $this->query->fetchAll(PDO::FETCH_OBJ);
+                $this->count       = $this->query->rowCount();
             } else {
-                $this->_error = true;
+                $this->error = true;
             }
         }
 
         return $this;
     }
 
-    public function action($action, $table, $where = [])
+    public function action($action, $table, $where = []): Database
     {
-        if (count($where) === 3) {
-            $operators  = ['=', '>', '<', '>=', '<='];
+        if (count($where) !== 3 && $where !== []) {
+            throw new Exception('where em formato incorreto');
+        }
 
-            $field      = $where[0];
-            $operator   = $where[1];
-            $value      = $where[2];
+        if ($where == []) {
+            $sql = "{$action} FROM {$table}";
 
-            if (in_array($operator, $operators)) {
-                $sql = "{$action} FROM {$table} WHERE {$field} {$operator} ?";
-
-                if (!$this->query($sql, [$value])->error()) {
-                    return $this;
-                }
+            if (!$this->query($sql)->error()) {
+                return $this;
             }
         }
 
-        return false;
+        $operators  = ['=', '>', '<', '>=', '<='];
+
+        $field      = $where[0];
+        $operator   = $where[1];
+        $value      = $where[2];
+
+        if (in_array($operator, $operators)) {
+            $sql = "{$action} FROM {$table} WHERE {$field} {$operator} ?";
+
+            var_dump($sql);
+            if (!$this->query($sql, [$value])->error()) {
+                return $this;
+            }
+        }
+        return $this;
     }
 
-    public function get($table, $where)
+    public function get($table, $where = [])
     {
         return $this->action('SELECT *', $table, $where);
     }
 
-    public function delete($table, $where)
+    public function delete($table, $where = [])
     {
         return $this->action('DELETE', $table, $where);
     }
 
-    public function insert($table, $fields = [])
+    public function insert($table, $fields = []): bool
     {
-        if (count($fields)) {
-            $keys   = array_keys($fields);
-            $values = '';
-            $x      = 1;
+        if (count($fields) === 0) {
+            return false;
+        }
 
-            foreach ($fields as $field) {
-                $values .= '?';
+        $keys   = array_keys($fields);
+        $values = '';
+        $x      = 1;
 
-                if ($x < count($fields)) {
-                    $values .= ', ';
-                }
+        foreach ($fields as $field) {
+            $values .= '?';
 
-                $x++;
+            if ($x < count($fields)) {
+                $values .= ', ';
             }
 
-            $sql = "INSERT INTO {$table} (`" . implode('`, `', $keys) . "`) VALUES ({$values})";
+            $x++;
+        }
 
-            if (!$this->query($sql, $fields)->error()) {
-                return true;
-            }
+        $sql = "INSERT INTO {$table} (`" . implode('`, `', $keys) . "`) VALUES ({$values})";
+
+        if (!$this->query($sql, $fields)->error()) {
+            return true;
         }
 
         return false;
@@ -141,7 +153,7 @@ class Database
 
     public function results()
     {
-        return $this->_results;
+        return $this->results;
     }
 
     public function first()
@@ -151,11 +163,11 @@ class Database
 
     public function error()
     {
-        return $this->_error;
+        return $this->error;
     }
 
     public function count()
     {
-        return $this->_count;
+        return $this->count;
     }
 }

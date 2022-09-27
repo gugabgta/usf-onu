@@ -1,0 +1,39 @@
+version: '3'
+services:
+  onu:
+    build: ./docker
+    user: 'local'
+    ports:
+      - '8080:80'
+    volumes:
+      - ./:/var/www/html
+    environment:
+      WEB_DOCUMENT_ROOT: '/var/www'
+      MSQL_HOST: ${MSQL_HOST}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DBNAME: ${MYSQL_DBNAME}
+    networks:
+      - onu
+
+  db:
+    image: mysql
+    volumes:
+      - volumes:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    container_name: mysql_onu
+    environment:
+      MYSQL_USER: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DBNAME}
+    networks:
+      - onu
+
+volumes:
+  data:
+  volumes:
+
+networks:
+  onu:

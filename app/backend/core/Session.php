@@ -31,8 +31,8 @@ class Session
             $session = self::get($name);
             self::delete($name);
             return $session;
-        } else {
-            self::put($name, $string);
         }
+
+        self::put($name, $string);
     }
 }

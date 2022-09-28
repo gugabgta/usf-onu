@@ -19,8 +19,9 @@ setup: ## Setup required environment
 
 .PHONY: run
 run: ## Run service
-	@docker compose up --build --remove-orphans
+	@docker compose up -d --build --remove-orphans
 
 .PHONY: stop
 stop: ## Stop service
 	@docker stop onu
+	@docker stop mysql_onu

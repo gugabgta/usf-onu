@@ -18,7 +18,7 @@
     <h1><?php appName(); ?></h1>
     <p><?= 'oi' ?>!</p>
     <?php
-        // $db = Database::getInstance(); // testing
-        // var_dump($db->get('test')->results()); // testing
+        $db = Database::getInstance(); // testing
+        var_dump($db->get('test')->results()); // testing
     ?>
 </div>

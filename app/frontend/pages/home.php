@@ -1,21 +1,22 @@
-<div class="container" style="margin-top:30px">
-    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="75" style="width: 75%">
-    <div class="row">
-        <div class="col-sm-4">
-            <ul class="nav nav-pills flex-column">
-                <li class="nav-item">
-                    <button class="btn btn-primary" onclick="load()">progress bar</a>
-                </li>
-                <br>
-                <li class="nav-item">
-                    <button class="btn btn-primary" onclick="modal()">modal</a>
-                </li>
-            </ul>
-            <hr class="d-sm-none">
-        </div>
-        <div class="col-sm-8">
-            <h2>TITLE HEADING</h2>
-            <h5>Title description, <?= date("d/m/Y") ?></h5>
+<?php
+
+    $fish = new Fish();
+    $data = $fish->getAll();
+    var_dump(print_r($data, true));
+?>
+<div class="container pad-top">
+    <div class="card" style="width: 18rem;">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
         </div>
     </div>
 </div>
+
+<style>
+    .pad-top {
+        margin-top: 20px;
+    }
+</style>

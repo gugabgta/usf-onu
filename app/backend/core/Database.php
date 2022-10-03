@@ -80,7 +80,6 @@ class Database
         if (in_array($operator, $operators)) {
             $sql = "{$action} FROM {$table} WHERE {$field} {$operator} ?";
 
-            var_dump($sql);
             if (!$this->query($sql, [$value])->error()) {
                 return $this;
             }

@@ -29,6 +29,8 @@ function createElementFromHtml(htmlString) {
     return div.firstChild;
 }
 
+function showFish
+
 //destroy modal after hiding it
 document.addEventListener("hide.bs.modal", (e) => {
     document.querySelector('.modal').remove()

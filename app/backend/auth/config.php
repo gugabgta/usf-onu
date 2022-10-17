@@ -2,7 +2,7 @@
 
 $GLOBALS['config'] = [
     'app' => [
-        'name'          => 'Onu',
+        'name'          => 'Atributos da vida marinha',
     ],
     'mysql' => [
         'host'          => getenv('MSQL_HOST') ?? '127.0.0.1',

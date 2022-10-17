@@ -10,7 +10,7 @@ async function load(waiting = 100) {
     const modal = new bootstrap.Modal(el)
     modal.show()
     await new Promise(r => setTimeout(r, waiting));
-    document.querySelector('.modal').remove()
+    modal.hide()
 }
 
 async function modal() {
@@ -24,12 +24,19 @@ async function modal() {
 }
 
 function createElementFromHtml(htmlString) {
-    var div = document.createElement('div');
+    let div = document.createElement('div');
     div.innerHTML = htmlString.trim();
     return div.firstChild;
 }
 
-function showFish
+async function showFish(id) {
+    const response = await fetch('fish_attributes.php/?id='+id)
+    const component = createElementFromHtml(await response.text())
+    document.body.appendChild(component)
+    const el = document.querySelector('.modal')
+    const modal = new bootstrap.Modal(el)
+    modal.show()
+}
 
 //destroy modal after hiding it
 document.addEventListener("hide.bs.modal", (e) => {

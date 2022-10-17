@@ -16,5 +16,4 @@
 
 <div class="jumbotron text-center" style="margin-bottom:0">
     <h1><?php appName(); ?></h1>
-    <p><?= 'oi' ?>!</p>
 </div>

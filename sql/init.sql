@@ -59,4 +59,28 @@ insert into fish_attribute
 
 
 update fish set image_src = 'https://s3-sa-east-1.amazonaws.com/youportal/fotos/noticias/13801/gd/20-curiosidades-sobre-o-cavalo-marinho_jpge.jpg'
-where id_fish = 1;
+where id_fish = 1;  -- 'Cavalo Marinho'
+update fish set image_src = 'https://www.infoescola.com/wp-content/uploads/2010/10/peixa-lua_438562036.jpg'
+where id_fish = 2;  -- 'Peixe Lua'
+update fish set image_src = 'http://ondasdeleitura.pbworks.com/f/peixe1.jpg'
+where id_fish = 3;  -- 'Peixe Voador'
+update fish set image_src = 'https://www.infoescola.com/wp-content/uploads/2010/04/salm%C3%A3o_109835651.jpg'
+where id_fish = 4;  -- 'Salmão'
+update fish set image_src = 'https://st.depositphotos.com/1033034/5036/i/600/depositphotos_50360083-stock-photo-fish-catfish.jpg'
+where id_fish = 5;  -- 'Peixe Gato'
+update fish set image_src = 'https://images.tcdn.com.br/img/img_prod/749804/peixe_arqueiro_toxotes_jaculatrix_1627_2_ea9f273346963d0447f59736f0060d5a.jpg'
+where id_fish = 6;  -- 'Peixe-arqueiro'
+update fish set image_src = 'https://panoramadaaquicultura.com.br/wp-content/uploads/2018/06/Snook_522.jpg'
+where id_fish = 7;  -- 'Robalo'
+update fish set image_src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNJ1HpUXXSQvAOLqWKhGRCB8onefbolCqH4tP497fId2BwTSky6k2UlgepLMO3bacys40&usqp=CAU'
+where id_fish = 8;  -- 'Bodião Limpador'
+update fish set image_src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Esox_lucius_ZOO_1.jpg/800px-Esox_lucius_ZOO_1.jpg'
+where id_fish = 9;  -- 'Lúcio-almiscarado'
+update fish set image_src = 'http://d17oknutsq9rw.cloudfront.net/wp-content/uploads/2016/07/04003115/2339404034_92b238a83e_b-e1467605166534-800x496.jpg'
+where id_fish = 10; --'Piranha'
+update fish set image_src = 'https://static.mundoeducacao.uol.com.br/mundoeducacao/2022/05/peixe-leao.jpg'
+where id_fish = 11;
+update fish set image_src = 'https://www.infoescola.com/wp-content/uploads/2010/11/mor%C3%A9ia_179904953.jpg'
+where id_fish = 12;
+update fish set image_src = 'https://billfishwio.com/wp-content/uploads/2020/06/billfish_500x750.png'
+where id_fish = 13; --'Peixe-agulha'

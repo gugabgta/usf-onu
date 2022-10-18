@@ -30,12 +30,19 @@ function createElementFromHtml(htmlString) {
 }
 
 async function showFish(id) {
+    await load(500)
     const response = await fetch('fish_attributes.php/?id='+id)
     const component = createElementFromHtml(await response.text())
     document.body.appendChild(component)
     const el = document.querySelector('.modal')
     const modal = new bootstrap.Modal(el)
     modal.show()
+}
+
+async function deleteFish(id) {
+    await load(1000)
+    await fetch('delete_fish.php/?id='+id)
+    location.href="index.php";
 }
 
 //destroy modal after hiding it

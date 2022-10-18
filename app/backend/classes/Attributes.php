@@ -31,6 +31,11 @@ class Attributes
         return $this;
     }
 
+    public function store(array $values)
+    {
+        $this->db->insert('fish_attribute', $values);
+    }
+
     public function getIdFishAttribute()
     {
         return $this->id_fish_attribute;

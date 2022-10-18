@@ -32,6 +32,19 @@ class Fish
         return $this;
     }
 
+    public function store(array $values): int
+    {
+        $this->db->insert('fish', $values);
+        $id = $this->db->query('select id_fish from fish order by id_fish desc limit 1')->first() ?? [];
+        return $id->id_fish;
+    }
+
+    public function delete($id_fish): void
+    {
+        $this->db->query('delete from fish where id_fish = ' . $id_fish);
+        $this->db->query('delete from fish_attribute where id_fish = ' . $id_fish);
+    }
+
     public function getIdFish()
     {
         return $this->id_fish;

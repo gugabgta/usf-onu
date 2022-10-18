@@ -18,6 +18,7 @@ $card = function ($fish) {
             <h5 class="card-title"> $fish->name </h5>
             <p class="card-text"> $fish->description </p>
             <a href="#" class="btn btn-primary" onclick="showFish($fish->id_fish)">Status</a>
+            <a href="#" class="btn btn-danger" onclick="deleteFish($fish->id_fish)">Delete</a>
         </div>
     </div>
     HTML;

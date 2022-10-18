@@ -20,6 +20,8 @@ services:
     ports:
       - "3306:3306"
     container_name: mysql_onu
+    volumes:
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       MYSQL_USER: ${MYSQL_USERNAME}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
